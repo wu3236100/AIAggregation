@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <None Remove="Images\关闭.png" />
+    <None Remove="Images\最大化.png" />
     <None Remove="Images\最小化.png" />
     <None Remove="Images\还原.png" />
   </ItemGroup>
@@ -27,6 +28,7 @@
 
   <ItemGroup>
     <Resource Include="Images\关闭.png" />
+    <Resource Include="Images\最大化.png" />
     <Resource Include="Images\最小化.png" />
     <Resource Include="Images\还原.png" />
   </ItemGroup>

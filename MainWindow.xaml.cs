@@ -21,6 +21,11 @@ namespace WebsiteAggregation;
 /// </summary>
 public partial class MainWindow : Window
 {
+    private bool _isDragging;
+    private Point _clickPosition;
+    private readonly BitmapImage _maxImage;
+    private readonly BitmapImage _restoreImage;
+
     public MainWindow()
     {
         //SetWindowIcon();
@@ -34,18 +39,21 @@ public partial class MainWindow : Window
         var appSettings = LoadAppSettings();
         this.Title = appSettings.Title;
         AddTabsToControl(appSettings.WebSites);
+
+        _maxImage = new BitmapImage(new Uri("pack://application:,,,/Images/最大化.png"));
+        _restoreImage = new BitmapImage(new Uri("pack://application:,,,/Images/还原.png"));
     }
 
     private void AddTabsToControl(List<WebSites> webSites)
     {
-        foreach (var Site in webSites)
+        foreach (var site in webSites)
         {
             tabControl.Items.Add(new TabItem
             {
-                Header = Site.Title,
+                Header = site.Title,
                 Content = new WebView2()
                 {
-                    Source = new Uri(Site.Url)
+                    Source = new Uri(site.Url)
                 }
             });
         }
@@ -60,20 +68,6 @@ public partial class MainWindow : Window
         return JsonConvert.DeserializeObject<AppSettings>(fileContents)!;
     }
 
-    //private void SetWindowIcon()
-    //{
-    //    var iconFilePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "icon.png");
-
-    //    BitmapImage bitmap = new();
-
-    //    bitmap.BeginInit();
-    //    bitmap.UriSource = new Uri(iconFilePath, UriKind.Absolute);
-    //    bitmap.CacheOption = BitmapCacheOption.OnLoad;
-    //    bitmap.EndInit();
-
-    //    this.Icon = bitmap;
-    //}
-
     private void WindowStatusChange(object sender, RoutedEventArgs e)
     {
         if (sender is Button btn)
@@ -81,7 +75,12 @@ public partial class MainWindow : Window
             switch (btn.Name)
             {
                 case "Btn_Close":
-                    this.Close();
+                    //弹出确认框
+                    var result = MessageBox.Show("是否关闭？", "提示", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        this.Close();
+                    }
                     break;
                 case "Btn_Maximize":
                     this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
@@ -105,7 +104,35 @@ public partial class MainWindow : Window
         base.OnClosing(e);
     }
 
+    #region 拖动实现
+    private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        _isDragging = true;
+        _clickPosition = e.GetPosition(this);
+        Mouse.Capture(canvas);
+    }
 
+    private void Canvas_MouseMove(object sender, MouseEventArgs e)
+    {
+        if (_isDragging && this.WindowState != WindowState.Maximized)
+        {
+            Point currentPosition = e.GetPosition(this);
+            this.Left += currentPosition.X - _clickPosition.X;
+            this.Top += currentPosition.Y - _clickPosition.Y;
+        }
+    }
+
+    private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    {
+        _isDragging = false;
+        Mouse.Capture(null);
+    }
+    #endregion
+
+    private void Window_StateChanged(object sender, EventArgs e)
+    {
+        Img_Maximize.Source = this.WindowState == WindowState.Maximized ? _restoreImage : _maxImage;
+    }
 }
 
 public record AppSettings(string Title, List<WebSites> WebSites);
