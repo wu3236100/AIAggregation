@@ -48,7 +48,7 @@ public partial class MainWindow : Window
     {
         foreach (var site in webSites)
         {
-            tabControl.Items.Add(new TabItem
+            TabControlMain.Items.Add(new TabItem
             {
                 Header = site.Title,
                 Content = new WebView2()
@@ -70,25 +70,25 @@ public partial class MainWindow : Window
 
     private void WindowStatusChange(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn)
+        if (sender is not Button btn)
+            return;
+        if (btn == BtnClose)
         {
-            switch (btn.Name)
+            //弹出确认框
+            var result = MessageBox.Show("是否关闭？", "提示", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.Yes)
             {
-                case "Btn_Close":
-                    //弹出确认框
-                    var result = MessageBox.Show("是否关闭？", "提示", MessageBoxButton.YesNo);
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        this.Close();
-                    }
-                    break;
-                case "Btn_Maximize":
-                    this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
-                    break;
-                case "Btn_Minimize":
-                    this.WindowState = WindowState.Minimized;
-                    break;
+                this.Close();
             }
+        }
+        else if (btn == BtnMaximize)
+        {
+            // Maximize or restore the window
+            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+        }
+        else if (btn == BtnMinimize)
+        {
+            this.WindowState = WindowState.Minimized;
         }
     }
 
@@ -105,11 +105,12 @@ public partial class MainWindow : Window
     }
 
     #region 拖动实现
+
     private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         _isDragging = true;
         _clickPosition = e.GetPosition(this);
-        Mouse.Capture(canvas);
+        Mouse.Capture(CanvasMain);
     }
 
     private void Canvas_MouseMove(object sender, MouseEventArgs e)
@@ -127,11 +128,12 @@ public partial class MainWindow : Window
         _isDragging = false;
         Mouse.Capture(null);
     }
+
     #endregion
 
     private void Window_StateChanged(object sender, EventArgs e)
     {
-        Img_Maximize.Source = this.WindowState == WindowState.Maximized ? _restoreImage : _maxImage;
+        ImgMaximize.Source = this.WindowState == WindowState.Maximized ? _restoreImage : _maxImage;
     }
 }
 

@@ -3,27 +3,25 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
-        xmlns:local="clr-namespace:WebsiteAggregation"
         WindowStyle="None"
         StateChanged="Window_StateChanged"
         mc:Ignorable="d">
 
-    <Canvas x:Name="canvas" 
+    <Canvas x:Name="CanvasMain" 
             MouseLeftButtonDown="Canvas_MouseLeftButtonDown"
             MouseMove="Canvas_MouseMove"
             MouseLeftButtonUp ="Canvas_MouseLeftButtonUp">
-        <TabControl x:Name="tabControl" 
-                    Width="{Binding ElementName=canvas, Path=ActualWidth}"
-                    Height="{Binding ElementName=canvas, Path=ActualHeight}">
+        <TabControl x:Name="TabControlMain" 
+                    Width="{Binding ElementName=CanvasMain, Path=ActualWidth}"
+                    Height="{Binding ElementName=CanvasMain, Path=ActualHeight}">
         </TabControl>
-        <Button x:Name="Btn_Close" Canvas.Right="5" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
+        <Button x:Name="BtnClose" Canvas.Right="5" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
             <Image Source="Images/关闭.png" Width="18" Height="18" />
         </Button>
-        <Button x:Name="Btn_Maximize" Canvas.Right="45" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
-            <Image x:Name="Img_Maximize" Source="Images/最大化.png" Width="18" Height="18" />
+        <Button x:Name="BtnMaximize" Canvas.Right="45" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
+            <Image x:Name="ImgMaximize" Source="Images/最大化.png" Width="18" Height="18" />
         </Button>
-        <Button x:Name="Btn_Minimize" Canvas.Right="85" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
+        <Button x:Name="BtnMinimize" Canvas.Right="85" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
             <Image Source="Images/最小化.png" Width="18" Height="18" />
         </Button>
     </Canvas>
