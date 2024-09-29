@@ -106,14 +106,14 @@ public partial class MainWindow : Window
 
     #region 拖动实现
 
-    private void Canvas_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
     {
         _isDragging = true;
         _clickPosition = e.GetPosition(this);
         Mouse.Capture(CanvasMain);
     }
 
-    private void Canvas_MouseMove(object sender, MouseEventArgs e)
+    private void Window_MouseMove(object sender, MouseEventArgs e)
     {
         if (_isDragging && this.WindowState != WindowState.Maximized)
         {
@@ -123,7 +123,7 @@ public partial class MainWindow : Window
         }
     }
 
-    private void Canvas_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+    private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
     {
         _isDragging = false;
         Mouse.Capture(null);
