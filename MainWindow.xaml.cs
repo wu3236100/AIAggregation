@@ -74,14 +74,38 @@ public partial class MainWindow : Window
     //    this.Icon = bitmap;
     //}
 
+    private void WindowStatusChange(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button btn)
+        {
+            switch (btn.Name)
+            {
+                case "Btn_Close":
+                    this.Close();
+                    break;
+                case "Btn_Maximize":
+                    this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+                    break;
+                case "Btn_Minimize":
+                    this.WindowState = WindowState.Minimized;
+                    break;
+            }
+        }
+    }
+
     protected override void OnClosing(CancelEventArgs e)
     {
-        Properties.Settings.Default.LastWindowWidth = (int)this.Width;
-        Properties.Settings.Default.LastWindowHeight = (int)this.Height;
-        Properties.Settings.Default.Save();
+        if (this.WindowState != WindowState.Minimized)
+        {
+            Properties.Settings.Default.LastWindowWidth = (int)this.Width;
+            Properties.Settings.Default.LastWindowHeight = (int)this.Height;
+            Properties.Settings.Default.Save();
+        }
 
         base.OnClosing(e);
     }
+
+
 }
 
 public record AppSettings(string Title, List<WebSites> WebSites);

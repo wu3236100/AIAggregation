@@ -5,11 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:wv2="clr-namespace:Microsoft.Web.WebView2.Wpf;assembly=Microsoft.Web.WebView2.Wpf"
         xmlns:local="clr-namespace:WebsiteAggregation"
+        WindowStyle="None"
         mc:Ignorable="d">
-    
-    <Grid>
-        <TabControl x:Name="tabControl">
+
+    <Canvas x:Name="canvas" Background="Red">
+        <TabControl x:Name="tabControl" 
+                    Width="{Binding ElementName=canvas, Path=ActualWidth}"
+                    Height="{Binding ElementName=canvas, Path=ActualHeight}">
         </TabControl>
-    </Grid>
+        <Button x:Name="Btn_Close" Canvas.Right="5" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
+            <Image Source="Images/关闭.png" Width="20" Height="20" />
+        </Button>
+        <Button x:Name="Btn_Maximize" Canvas.Right="45" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
+            <Image Source="Images/还原.png" Width="20" Height="20" />
+        </Button>
+        <Button x:Name="Btn_Minimize" Canvas.Right="85" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
+            <Image Source="Images/最小化.png" Width="20" Height="20" />
+        </Button>
+    </Canvas>
 
 </Window>
