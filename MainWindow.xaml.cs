@@ -21,8 +21,6 @@ namespace WebsiteAggregation;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private bool _isDragging;
-    private Point _clickPosition;
     private readonly BitmapImage _maxImage;
     private readonly BitmapImage _restoreImage;
 
@@ -104,32 +102,14 @@ public partial class MainWindow : Window
         base.OnClosing(e);
     }
 
-    #region 拖动实现
-
-    private void Window_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        _isDragging = true;
-        _clickPosition = e.GetPosition(this);
-        Mouse.Capture(CanvasMain);
-    }
-
     private void Window_MouseMove(object sender, MouseEventArgs e)
     {
-        if (_isDragging && this.WindowState != WindowState.Maximized)
+        if (e.LeftButton == MouseButtonState.Pressed)
         {
-            Point currentPosition = e.GetPosition(this);
-            this.Left += currentPosition.X - _clickPosition.X;
-            this.Top += currentPosition.Y - _clickPosition.Y;
+            this.DragMove();
+            //Window.DragMove();
         }
     }
-
-    private void Window_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-    {
-        _isDragging = false;
-        Mouse.Capture(null);
-    }
-
-    #endregion
 
     private void Window_StateChanged(object sender, EventArgs e)
     {
