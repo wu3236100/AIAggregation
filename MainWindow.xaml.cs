@@ -1,6 +1,5 @@
 ﻿using Microsoft.Web.WebView2.Wpf;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.ComponentModel;
 using System.IO;
 using System.Text;
@@ -30,12 +29,12 @@ public partial class MainWindow : Window
         InitializeComponent();
         if (Properties.Settings.Default.LastWindowWidth > 0 && Properties.Settings.Default.LastWindowHeight > 0)
         {
-            this.Width = Properties.Settings.Default.LastWindowWidth;
-            this.Height = Properties.Settings.Default.LastWindowHeight;
+            Width = Properties.Settings.Default.LastWindowWidth;
+            Height = Properties.Settings.Default.LastWindowHeight;
         }
 
         var appSettings = LoadAppSettings();
-        this.Title = appSettings.Title;
+        Title = appSettings.Title;
         AddTabsToControl(appSettings.WebSites);
 
         _maxImage = new BitmapImage(new Uri("pack://application:,,,/Images/最大化.png"));
@@ -76,26 +75,26 @@ public partial class MainWindow : Window
             var result = MessageBox.Show("是否关闭？", "提示", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.Yes)
             {
-                this.Close();
+                Close();
             }
         }
         else if (btn == BtnMaximize)
         {
             // Maximize or restore the window
-            this.WindowState = this.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
         }
         else if (btn == BtnMinimize)
         {
-            this.WindowState = WindowState.Minimized;
+            WindowState = WindowState.Minimized;
         }
     }
 
     protected override void OnClosing(CancelEventArgs e)
     {
-        if (this.WindowState != WindowState.Minimized)
+        if (WindowState != WindowState.Minimized)
         {
-            Properties.Settings.Default.LastWindowWidth = (int)this.Width;
-            Properties.Settings.Default.LastWindowHeight = (int)this.Height;
+            Properties.Settings.Default.LastWindowWidth = (int)Width;
+            Properties.Settings.Default.LastWindowHeight = (int)Height;
             Properties.Settings.Default.Save();
         }
 
@@ -104,16 +103,31 @@ public partial class MainWindow : Window
 
     private void Window_MouseMove(object sender, MouseEventArgs e)
     {
-        if (e.LeftButton == MouseButtonState.Pressed)
+        if (e.LeftButton == MouseButtonState.Pressed && WindowState == WindowState.Normal)
         {
-            this.DragMove();
-            //Window.DragMove();
+            DragMove();
         }
     }
 
-    private void Window_StateChanged(object sender, EventArgs e)
+    private void Window_OnStateChanged(object sender, EventArgs e)
     {
-        ImgMaximize.Source = this.WindowState == WindowState.Maximized ? _restoreImage : _maxImage;
+        ImgMaximize.Source = WindowState == WindowState.Maximized ? _restoreImage : _maxImage;
+    }
+
+    private DateTime _lastClickTime = DateTime.Now;
+
+    private void Canvas_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+    {
+        var now = DateTime.Now;
+        if (now - _lastClickTime < TimeSpan.FromMilliseconds(500))
+        {
+            WindowState = WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            _lastClickTime = now.AddSeconds(-1);
+        }
+        else
+        {
+            _lastClickTime = now;
+        }
     }
 }
 
