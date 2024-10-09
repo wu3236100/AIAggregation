@@ -10,7 +10,7 @@
         mc:Ignorable="d">
     <Border BorderBrush="Gray" BorderThickness="1" Padding="3 0 3 3">
         <Canvas x:Name="CanvasMain" MouseMove="Window_MouseMove" MouseLeftButtonDown="Canvas_OnMouseLeftButtonDown">
-            <TabControl x:Name="TabControlMain"
+            <TabControl x:Name="TabControlMain" PreviewKeyDown="TabControlMain_PreviewKeyDown"
                         Width="{Binding ElementName=CanvasMain, Path=ActualWidth}"
                         Height="{Binding ElementName=CanvasMain, Path=ActualHeight}">
             </TabControl>

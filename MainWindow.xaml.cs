@@ -129,6 +129,14 @@ public partial class MainWindow : Window
             _lastClickTime = now;
         }
     }
+
+    private void TabControlMain_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Home || e.Key == Key.End)
+        {
+            e.Handled = true;
+        }
+    }
 }
 
 public record AppSettings(string Title, List<WebSites> WebSites);
