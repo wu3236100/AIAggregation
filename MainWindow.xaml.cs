@@ -69,6 +69,7 @@ public partial class MainWindow : Window
     {
         if (sender is not Button btn)
             return;
+
         if (btn == BtnClose)
         {
             //弹出确认框
@@ -87,11 +88,21 @@ public partial class MainWindow : Window
         {
             WindowState = WindowState.Minimized;
         }
+        else if (btn == BtnRefresh)
+        {
+            if (TabControlMain.SelectedItem is not TabItem currentTabItem) 
+                return;
+            
+            if (currentTabItem.Content is WebView2 currentWebView2)
+            {
+                currentWebView2.Reload();
+            }
+        }
     }
 
     protected override void OnClosing(CancelEventArgs e)
     {
-        if (WindowState != WindowState.Minimized)
+        if (WindowState != WindowState.Minimized && WindowState != WindowState.Maximized)
         {
             Properties.Settings.Default.LastWindowWidth = (int)Width;
             Properties.Settings.Default.LastWindowHeight = (int)Height;
@@ -132,7 +143,7 @@ public partial class MainWindow : Window
 
     private void TabControlMain_PreviewKeyDown(object sender, KeyEventArgs e)
     {
-        if (e.Key == Key.Home || e.Key == Key.End)
+        if (e.Key is Key.Home or Key.End)
         {
             e.Handled = true;
         }

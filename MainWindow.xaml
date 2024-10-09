@@ -23,6 +23,9 @@
             <Button x:Name="BtnMinimize" Canvas.Right="80" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
                 <Image Source="Images/最小化.png" Width="18" Height="18" />
             </Button>
+            <Button x:Name="BtnRefresh" Canvas.Right="120" BorderThickness="0" Background="Transparent" Click="WindowStatusChange">
+                <Image Source="Images/刷新.png" Width="18" Height="18" />
+            </Button>
         </Canvas>
     </Border>
 </Window>
